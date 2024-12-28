@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import PokemonModal from '@/components/PokemonModal'
 
 export default function Home() {
   const [pokemon, setPokemon] = useState([])
@@ -9,6 +10,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedType, setSelectedType] = useState('')
   const [favorites, setFavorites] = useState([])
+  const [selectedPokemon, setSelectedPokemon] = useState(null)
 
   // Load favorites from localStorage on component mount
   useEffect(() => {
@@ -47,6 +49,15 @@ export default function Home() {
 
     fetchPokemon()
   }, [currentPage])
+
+  const toggleFavorite = (pokemon) => {
+    const newFavorites = favorites.includes(pokemon.id)
+      ? favorites.filter(id => id !== pokemon.id)
+      : [...favorites, pokemon.id]
+    
+    setFavorites(newFavorites)
+    localStorage.setItem('pokemonFavorites', JSON.stringify(newFavorites))
+  }
 
   // Filter pokemon based on search and type
   const filteredPokemon = pokemon.filter((p) => {
@@ -99,13 +110,25 @@ export default function Home() {
         {filteredPokemon.map((p) => (
           <div
             key={p.id}
-            className="border rounded-lg p-4 hover:shadow-lg transition-shadow"
+            className="border rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={() => setSelectedPokemon(p)}
           >
-            <img
-              src={p.sprites.front_default}
-              alt={p.name}
-              className="w-32 h-32 mx-auto"
-            />
+            <div className="relative">
+              <button
+                className="absolute top-0 right-0 p-2"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  toggleFavorite(p)
+                }}
+              >
+                {favorites.includes(p.id) ? '❤️' : '🤍'}
+              </button>
+              <img
+                src={p.sprites.front_default}
+                alt={p.name}
+                className="w-32 h-32 mx-auto"
+              />
+            </div>
             <h2 className="text-center text-lg capitalize font-bold mt-2">
               {p.name}
             </h2>
@@ -122,6 +145,14 @@ export default function Home() {
           </div>
         ))}
       </div>
+
+      {/* Modal */}
+      {selectedPokemon && (
+        <PokemonModal
+          pokemon={selectedPokemon}
+          onClose={() => setSelectedPokemon(null)}
+        />
+      )}
 
       {/* Pagination */}
       <div className="flex justify-center gap-4 mt-6">
