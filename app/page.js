@@ -69,19 +69,19 @@ export default function Home() {
   })
 
   return (
-    <div>
+    <div className="min-h-screen bg-white text-gray-900">
       {/* Search and Filter Section */}
       <div className="mb-6 space-y-4">
         <input
           type="text"
           placeholder="Search Pokémon..."
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded text-gray-900 bg-white"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         
         <select
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded text-gray-900 bg-white"
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
         >
@@ -89,6 +89,21 @@ export default function Home() {
           <option value="fire">Fire</option>
           <option value="water">Water</option>
           <option value="grass">Grass</option>
+          <option value="electric">Electric</option>
+          <option value="psychic">Psychic</option>
+          <option value="ice">Ice</option>
+          <option value="dragon">Dragon</option>
+          <option value="dark">Dark</option>
+          <option value="fairy">Fairy</option>
+          <option value="normal">Normal</option>
+          <option value="fighting">Fighting</option>
+          <option value="flying">Flying</option>
+          <option value="poison">Poison</option>
+          <option value="ground">Ground</option>
+          <option value="rock">Rock</option>
+          <option value="bug">Bug</option>
+          <option value="ghost">Ghost</option>
+          <option value="steel">Steel</option>
         </select>
       </div>
 
@@ -110,12 +125,12 @@ export default function Home() {
         {filteredPokemon.map((p) => (
           <div
             key={p.id}
-            className="border rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer"
+            className="border rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer bg-white text-gray-900"
             onClick={() => setSelectedPokemon(p)}
           >
             <div className="relative">
               <button
-                className="absolute top-0 right-0 p-2"
+                className="absolute top-0 right-0 p-2 hover:scale-110 transition-transform"
                 onClick={(e) => {
                   e.stopPropagation()
                   toggleFavorite(p)
@@ -126,7 +141,7 @@ export default function Home() {
               <img
                 src={p.sprites.front_default}
                 alt={p.name}
-                className="w-32 h-32 mx-auto"
+                className="w-32 h-32 mx-auto hover:scale-110 transition-transform"
               />
             </div>
             <h2 className="text-center text-lg capitalize font-bold mt-2">
@@ -136,7 +151,7 @@ export default function Home() {
               {p.types.map((type) => (
                 <span
                   key={type.type.name}
-                  className="px-2 py-1 bg-gray-200 rounded-full text-sm"
+                  className="px-2 py-1 bg-gray-200 rounded-full text-sm text-gray-900"
                 >
                   {type.type.name}
                 </span>
@@ -155,16 +170,16 @@ export default function Home() {
       )}
 
       {/* Pagination */}
-      <div className="flex justify-center gap-4 mt-6">
+      <div className="flex justify-center gap-4 mt-6 mb-8">
         <button
-          className="px-4 py-2 bg-red-600 text-white rounded disabled:opacity-50"
+          className="px-4 py-2 bg-red-600 text-white rounded disabled:opacity-50 hover:bg-red-700 transition-colors"
           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
           Previous
         </button>
         <button
-          className="px-4 py-2 bg-red-600 text-white rounded"
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
           onClick={() => setCurrentPage(prev => prev + 1)}
         >
           Next

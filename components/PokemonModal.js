@@ -3,7 +3,7 @@ export default function PokemonModal({ pokemon, onClose }) {
   
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+        <div className="bg-white rounded-lg p-6 max-w-lg w-full text-gray-900">
           <div className="flex justify-between items-start mb-4">
             <h2 className="text-2xl font-bold capitalize">{pokemon.name}</h2>
             <button
@@ -45,7 +45,7 @@ export default function PokemonModal({ pokemon, onClose }) {
                 {pokemon.abilities.map((ability) => (
                   <span
                     key={ability.ability.name}
-                    className="px-3 py-1 bg-gray-200 rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-200 rounded-full text-sm text-gray-900"
                   >
                     {ability.ability.name}
                   </span>
