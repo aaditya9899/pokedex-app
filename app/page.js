@@ -1,101 +1,144 @@
-import Image from "next/image";
+'use client'
+import { useState, useEffect } from 'react'
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [pokemon, setPokemon] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedType, setSelectedType] = useState('')
+  const [favorites, setFavorites] = useState([])
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Load favorites from localStorage on component mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('pokemonFavorites')
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites))
+    }
+  }, [])
+
+  // Fetch pokemon data
+  useEffect(() => {
+    const fetchPokemon = async () => {
+      try {
+        setLoading(true)
+        const offset = (currentPage - 1) * 20
+        const response = await fetch(
+          `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${offset}`
+        )
+        const data = await response.json()
+        
+        // Fetch detailed data for each Pokemon
+        const pokemonDetails = await Promise.all(
+          data.results.map(async (pokemon) => {
+            const res = await fetch(pokemon.url)
+            return res.json()
+          })
+        )
+        
+        setPokemon(pokemonDetails)
+        setLoading(false)
+      } catch (err) {
+        setError('Failed to fetch Pokemon')
+        setLoading(false)
+      }
+    }
+
+    fetchPokemon()
+  }, [currentPage])
+
+  // Filter pokemon based on search and type
+  const filteredPokemon = pokemon.filter((p) => {
+    const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesType = selectedType 
+      ? p.types.some(t => t.type.name === selectedType)
+      : true
+    return matchesSearch && matchesType
+  })
+
+  return (
+    <div>
+      {/* Search and Filter Section */}
+      <div className="mb-6 space-y-4">
+        <input
+          type="text"
+          placeholder="Search Pokémon..."
+          className="w-full p-2 border rounded"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        
+        <select
+          className="w-full p-2 border rounded"
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+        >
+          <option value="">All Types</option>
+          <option value="fire">Fire</option>
+          <option value="water">Water</option>
+          <option value="grass">Grass</option>
+        </select>
+      </div>
+
+      {/* Loading and Error States */}
+      {loading && (
+        <div className="text-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      )}
+      
+      {error && (
+        <div className="text-red-500 text-center py-10">
+          {error}
+        </div>
+      )}
+
+      {/* Pokemon Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {filteredPokemon.map((p) => (
+          <div
+            key={p.id}
+            className="border rounded-lg p-4 hover:shadow-lg transition-shadow"
+          >
+            <img
+              src={p.sprites.front_default}
+              alt={p.name}
+              className="w-32 h-32 mx-auto"
+            />
+            <h2 className="text-center text-lg capitalize font-bold mt-2">
+              {p.name}
+            </h2>
+            <div className="flex justify-center gap-2 mt-2">
+              {p.types.map((type) => (
+                <span
+                  key={type.type.name}
+                  className="px-2 py-1 bg-gray-200 rounded-full text-sm"
+                >
+                  {type.type.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center gap-4 mt-6">
+        <button
+          className="px-4 py-2 bg-red-600 text-white rounded disabled:opacity-50"
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Previous
+        </button>
+        <button
+          className="px-4 py-2 bg-red-600 text-white rounded"
+          onClick={() => setCurrentPage(prev => prev + 1)}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Next
+        </button>
+      </div>
     </div>
-  );
+  )
 }
