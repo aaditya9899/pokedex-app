@@ -1,5 +1,7 @@
 # Pokedex App![pokeball_optimized](https://github.com/user-attachments/assets/b3fc2037-6110-4fd3-8073-ab7183d166ba)
 
+## Deployed URL
+https://pokedex-app-aadityaprasad.vercel.app/
 
 ## Overview
 This project is built using [Next.js](https://nextjs.org), a React-based framework, and features GitHub OAuth integration for user authentication. The application was deployed on [Vercel](https://vercel.com) with environment configurations tailored for both local and production setups.
