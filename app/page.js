@@ -119,6 +119,13 @@ export default function Home() {
           {error}
         </div>
       )}
+      {!loading && !error && filteredPokemon.length === 0 && (
+        <div className="text-center py-10 bg-gray-50 rounded-lg">
+          <p className="text-gray-600 text-lg mb-2">No Pokémon found with the selected filters</p>
+          <p className="text-gray-500">Try changing your search terms or type filter, or navigate to a different page</p>
+         
+        </div>
+      )}
 
       {/* Pokemon Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
