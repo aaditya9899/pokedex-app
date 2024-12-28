@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Pokedex App![pokeball_optimized](https://github.com/user-attachments/assets/b3fc2037-6110-4fd3-8073-ab7183d166ba)
+
+
+## Overview
+This project is built using [Next.js](https://nextjs.org), a React-based framework, and features GitHub OAuth integration for user authentication. The application was deployed on [Vercel](https://vercel.com) with environment configurations tailored for both local and production setups.
 
 ## Getting Started
 
-First, run the development server:
+### Installation and Running the Application
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/aaditya9899/pokedex-app.git
+   cd pokedex-app
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Create an `.env.local` file for environment variables:
+   ```env
+   NEXTAUTH_URL=http://localhost:3000
+   GITHUB_CLIENT_ID=your_github_client_id
+   GITHUB_CLIENT_SECRET=your_github_client_secret
+   ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application in action.
 
-## Learn More
+## Features
+- **Authentication**: User login with GitHub OAuth using [NextAuth.js](https://next-auth.js.org/).
+- **Environment-Specific Configurations**: Local and production setups handled seamlessly.
+- **Tailwind CSS for Styling**: Responsive and modern UI achieved with minimal effort.
 
-To learn more about Next.js, take a look at the following resources:
+## Technologies Used
+- **Next.js**: For server-side rendering, routing, and API routes.
+- **NextAuth.js**: To enable secure and scalable authentication.
+- **Tailwind CSS**: For easy-to-use utility-first styling.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Challenges and Solutions
+1. **OAuth Configuration**:
+   - **Challenge**: Setting up GitHub OAuth for local and production environments.
+   - **Solution**: Carefully managing environment variables and referring to [NextAuth.js documentation](https://next-auth.js.org/).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Styling Issues**:
+   - **Challenge**: Initially faced difficulties with consistent styling across components.
+   - **Solution**: Leveraged the [Tailwind CSS documentation](https://tailwindcss.com/docs) to address specific issues and streamline the styling process.
 
-## Deploy on Vercel
+3. **Deployment Setup**:
+   - **Challenge**: Managing differing environment variables between local development and Vercel deployment.
+   - **Solution**: Configured Vercel environment variables through its settings dashboard and ensured compatibility with `.env.local` during local development.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
+The project is deployed on (https://pokedex-app-aadityaprasad.vercel.app/) Vercel’s integration with GitHub allowed for automated deployments upon each commit.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Final Thoughts
+This project was an enriching experience. I thoroughly enjoyed working with Next.js and NextAuth.js to implement secure authentication. While challenges arose, such as styling and deployment setup, the comprehensive documentation from Tailwind CSS and Next.js proved immensely helpful. Overall, I enjoyed building and deploying this application.
+
