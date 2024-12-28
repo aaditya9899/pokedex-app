@@ -56,7 +56,7 @@ This project is built using [Next.js](https://nextjs.org), a React-based framewo
 
 3. **Deployment Setup**:
    - **Challenge**: Managing differing environment variables between local development and Vercel deployment.
-   - **Solution**: Configured Vercel environment variables through its settings dashboard and ensured compatibility with `.env.local` during local development.
+   - **Solution**: Configured Vercel environment variables through its settings dashboard and previous intern experiences helped me to set it up correctly.
 
 ## Deployment
 The project is deployed on (https://pokedex-app-aadityaprasad.vercel.app/) Vercel’s integration with GitHub allowed for automated deployments upon each commit.
